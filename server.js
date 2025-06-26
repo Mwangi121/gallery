@@ -11,61 +11,37 @@ let image = require('./routes/image');
 // Initializing the app
 const app = express();
 
-// Initializing the app
-const app = express();
+// Connecting to the database
+const MONGODB_URI = process.env.MONGODB_URI || config.mongoURI[app.settings.env];
 
-// connecting the database
-
-const MONGODB_URI = process.env.MONGODB_URI || config.mongoURI[app.settings.env]
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true  },(err)=>{
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, (err) => {
     if (err) {
-        console.log(err)
-    }else{
-        console.log(`Connected to Database: ${MONGODB_URI}`)
-    }
-
-const MONGODB_URI = process.env.MONGODB_URI || config.mongoURI[app.settings.env]
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true  },(err)=>{
-    if (err) {
-        console.log(err)
-    }else{
-        console.log(`Connected to Database: ${MONGODB_URI}`)
+        console.log('Database connection error:', err);
+    } else {
+        console.log(`Connected to Database: ${MONGODB_URI}`);
     }
 });
-
-// test if the database has connected successfully
-// let db = mongoose.connection;
-// db.once('open', ()=>{
-//     console.log('Database connected successfully')
-// })
-// let db = mongoose.connection;
-// db.once('open', ()=>{
-//     console.log('Database connected successfully')
-// })
-
-
-
-
 
 // View Engine
 app.set('view engine', 'ejs');
 
-// Set up the public folder;
+// Set up the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// body parser middleware
+// Body parser middleware
 app.use(express.json());
+
+// Routes
 app.use('/', index);
 app.use('/image', image);
 
-// fixed port configuration for Render
+// Fixed port configuration for Render
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () =>{
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is listening at http://localhost:${PORT}`);
 });
-
-
-module.exports = app;
-
 
 module.exports = app;
