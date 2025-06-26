@@ -43,7 +43,7 @@ app.use('/image', image);
 module.exports = app;
 
 // Start server only if not in test mode
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 if (require.main === module) {
     app.listen(PORT, '0.0.0.0', () => {
         console.log(`Server is listening at http://localhost:${PORT}`);
