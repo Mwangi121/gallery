@@ -10,9 +10,15 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/Mwangi121/gallery.git'
             }
         }
-        stage('Initial Dependencies') {
+        stage('Install dependencies from respective .js files') {
             steps {
                 sh 'npm install'
+            }
+        }
+        
+       stage('Build') {
+            steps {
+                sh 'npm run build'
             }
         }
         stage('Run Tests') {
