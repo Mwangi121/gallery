@@ -8,10 +8,10 @@ const config = require('./_config');
 let index = require('./routes/index');
 let image = require('./routes/image');
 
-// Initializing the app
+// Initialize the app
 const app = express();
 
-// Connecting to the database
+// Connect to MongoDB
 const MONGODB_URI = process.env.MONGODB_URI || config.mongoURI[app.settings.env];
 
 mongoose.connect(MONGODB_URI, {
@@ -25,23 +25,27 @@ mongoose.connect(MONGODB_URI, {
     }
 });
 
-// View Engine
+// View engine setup
 app.set('view engine', 'ejs');
 
-// Set up the public folder
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Body parser middleware
+// Middleware
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 app.use('/', index);
 app.use('/image', image);
 
-// Fixed port configuration for Render
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is listening at http://localhost:${PORT}`);
-});
-
+// Export app for testing
 module.exports = app;
+
+// Start server only if not in test mode
+const PORT = process.env.PORT || 5000;
+if (require.main === module) {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is listening at http://localhost:${PORT}`);
+    });
+}
